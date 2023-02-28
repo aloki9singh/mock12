@@ -11,12 +11,14 @@ app.use(
     origin: "*",
   })
 );
-app.use("/api", productRouter);
 
+app.use(express.json());
+
+// server.use(express.urlencoded());
 app.get("/", (req, res) => {
   res.send("Welcome to OLX Classifieds API");
 });
-
+app.use("/api", productRouter);
 app.listen(process.env.PORT, async (req, res) => {
   try {
     await connection;

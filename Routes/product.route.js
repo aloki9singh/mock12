@@ -4,23 +4,22 @@ const { ProductModel } = require("../Model/product.model");
 const productRouter = express.Router();
 
 productRouter.post("/post", (req, res) => {
-  console.log(req.body);
-  res.send(req.body);
-  // try {
-  //   const product = new ProductModel(req.body);
-  //    product.save();
-  //   res.json({
-  //     success: true,
-  //     msg: "Product is Posted Successfully",
-  //     product: product,
-  //   });
-  // } catch (err) {
-  //   res.send({
-  //     success: true,
-  //     msg: "Product Post Error!",
-  //     err: err,
-  //   });
-  // }
+
+  try {
+    const product = new ProductModel(req.body);
+     product.save();
+    res.json({
+      success: true,
+      msg: "Product is Posted Successfully",
+      product: product,
+    });
+  } catch (err) {
+    res.send({
+      success: true,
+      msg: "Product Post Error!",
+      err: err,
+    });
+  }
 });
 //category name page
 // - Filter by Category (Clothing, Electronics, Furniture, Other)
