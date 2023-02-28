@@ -3,12 +3,12 @@ const { ProductModel } = require("../Model/product.model");
 
 const productRouter = express.Router();
 
-productRouter.post("/postClassified", (req, res) => {
+productRouter.post("/postClassified", async (req, res) => {
   const payload = req.body;
 
   try {
     const product = new ProductModel(payload);
-    product.save();
+    await product.save();
     res.status(201).json({
       success: true,
       msg: "Product is Posted Successfully",
@@ -26,18 +26,27 @@ productRouter.post("/postClassified", (req, res) => {
 // - Sort by date (based on the posted date)
 // - Search by product name
 // - Pagination (4 Cards per page)
-productRouter.get("/browseClassified", (req, res) => {
-    if(query=="")
-  
-
+productRouter.get("/browseClassified", async (req, res) => {
   try {
-    const product = new ProductModel(payload);
-    product.save();
-    res.status(201).json({
-      success: true,
-      msg: "Product is Posted Successfully",
-      product: product,
-    });
+    if (req.query == "category") {
+      const products = await ProductModel.find({
+        category: req.query.category,
+      });
+      res.status(201).json({
+        success: true,
+        msg: "Product is Posted Successfully",
+        products: products,
+      });
+    } else {
+      const products = await ProductModel.find();
+      res.status(201).json({
+        success: true,
+        msg: "Product is Posted Successfully",
+        products: products,
+      });
+    }
+
+  
   } catch (err) {
     res.send({
       success: true,
@@ -47,6 +56,6 @@ productRouter.get("/browseClassified", (req, res) => {
   }
 });
 
-module.exports={
-    productRouter
-}
+module.exports = {
+  productRouter,
+};
