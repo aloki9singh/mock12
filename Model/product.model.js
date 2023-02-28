@@ -8,7 +8,7 @@ const postSchema = mongoose.Schema(
     image: String,
     location: String,
     price: Number,
-    postedAt: String,
+    postedAt: { type: Date, default: Date.now },
   },
   {
     versionKey: false,
@@ -18,5 +18,5 @@ const postSchema = mongoose.Schema(
 const ProductModel = mongoose.model("Product", postSchema);
 
 module.exports = {
-  ProductModel
+  ProductModel,
 };
