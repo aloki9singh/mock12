@@ -3,50 +3,65 @@ const { ProductModel } = require("../Model/product.model");
 
 const productRouter = express.Router();
 
-productRouter.post("/postClassified", async (req, res) => {
-  const payload = req.body;
-
-  try {
-    const product = new ProductModel(payload);
-    await product.save();
-    res.status(201).json({
-      success: true,
-      msg: "Product is Posted Successfully",
-      product: product,
-    });
-  } catch (err) {
-    res.send({
-      success: true,
-      msg: "Product Post Error!",
-      err: err,
-    });
-  }
+productRouter.post("/post", (req, res) => {
+  console.log(req.body);
+  res.send(req.body);
+  // try {
+  //   const product = new ProductModel(req.body);
+  //    product.save();
+  //   res.json({
+  //     success: true,
+  //     msg: "Product is Posted Successfully",
+  //     product: product,
+  //   });
+  // } catch (err) {
+  //   res.send({
+  //     success: true,
+  //     msg: "Product Post Error!",
+  //     err: err,
+  //   });
+  // }
 });
+//category name page
 // - Filter by Category (Clothing, Electronics, Furniture, Other)
 // - Sort by date (based on the posted date)
 // - Search by product name
 // - Pagination (4 Cards per page)
-productRouter.get("/browseClassified", async (req, res) => {
+productRouter.get("/browse", async (req, res) => {
+  const page = req.query.page || 1;
   try {
     if (req.query == "category") {
       const products = await ProductModel.find({
         category: req.query.category,
+      })
+        .limit(4)
+        .skip(page * 4);
+      res.status(201).json({
+        success: true,
+        msg: "Product is Posted Successfully",
+        products: products,
       });
+    } else if (req.query == "name") {
+      const products = await ProductModel.find({
+        category: req.query.name,
+      })
+        .limit(4)
+        .skip(page * 4);
       res.status(201).json({
         success: true,
         msg: "Product is Posted Successfully",
         products: products,
       });
     } else {
-      const products = await ProductModel.find();
+      const products = await ProductModel.find()
+        .limit(4)
+        .skip(page * 4);
       res.status(201).json({
         success: true,
         msg: "Product is Posted Successfully",
         products: products,
       });
     }
-
-  
   } catch (err) {
     res.send({
       success: true,
